@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %} Estate {% endblock%}
+{% block content%}
+
+<h1 align="center">{{ customer.name }}</h1>
+
+
+<table id="estateTable" class="table-sm table-bordered table-condensed table-striped table-hover">
+    <thead>
+        <th scope="col">#</th>
+        <th scope="col">Sahibi</th>
+        <th scope="col">Proje</th>
+        <th scope="col">Blok</th>
+        <th scope="col">Kapı</th>
+        <th scope="col">Kat</th>
+        <th scope="col">Oda</th>
+        <th scope="col">M2</th>
+        <th scope="col">M2 Birim Fİyatı</th>
+        <th scope="col">Alım Tarihi</th>
+        <th scope="col">Peşinat</th>
+        <th scope="col">Satış Tarihi</th>
+        <th scope="col">Satış Fiyatı</th>
+        <th scope="col">Taksit Sayısı</th>
+        <th scope="col">Taksit Tutarı</th>
+        <th scope="col">Yatırımcıya Verilecek</th>
+        <th scope="col">Sağlam Gruba Kalan</th>
+        <th scope="col"> </th>
+
+
+        </tr>
+    </thead>
+    <tbody>
+
+        {% set counter = 0 %}
+        {% for estate in customer.estates %}
+
+        <tr>
+            <th scope="row"> {{ loop.index }}</th>
+            <td>Yeni Levent </td>
+            <td>{{ estate.blok }}</td>
+            <td>{{ estate.kapi }}</td>
+            <td>{{ estate.kat }}</td>
+            <td>{{ estate.oda }}</td>
+            <td>{{ estate.m2 }}</td>
+            <td>{{ estate.m2_birim }}</td>
+            <td>{{ estate.alim_tarih }}</td>
+            <td>{{ estate.alinan_pesinat }}</td>
+            <td>{{ estate.satis_tarih }}</td>
+            <td>{{ estate.satis_fiyat }}</td>
+            <td>{{ estate.taksit_sayisi }}</td>
+            <td>{{ estate.taksit_tutari }}</td>
+            <td>{{ estate.yatirimci_verilecek }}</td>
+            <td>{{ estate.saglam_gruba_kalan }}</td>
+
+            <td>
+                <button id="editEstateBtn" href="#editEstateModal" class="btn btn-link btn-xs"
+                    data-bs-target="#editEstateModal" data-project="{{ estate.project }}" data-blok="{{ estate.blok }}"
+                    data-kapi="{{ estate.kapi }}" data-kat="{{ estate.kat }}" data-oda="{{ estate.oda }}"
+                    data-m2="{{ estate.m2 }}" data-m2_birim="{{ estate.m2_birim }}"
+                    data-alim_tarih="{{ estate.alim_tarih }}" data-satis_tarih="{{ estate.satis_tarih }}"
+                    data-satis_fiyat="{{ estate.satis_fiyat }}" data-pesinat="{{ estate.alinan_pesinat }}" data-taksit_sayisi="{{ estate.taksit_sayisi }}"
+                    data-taksit_tutari="{{ estate.taksit_tutari }}"
+                    data-yatirimci_verilecek="{{ estate.yatirimci_verilecek }}"
+                    data-saglam_gruba_kalan="{{ estate.saglam_gruba_kalan }}" data-bs-toggle="modal"> Edit
+                </button>
+            </td>
+        </tr>
+        {% endfor %}
+
+
+
+    </tbody>
+</table>
+
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editEstateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Estate</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST">
+
+                    <div class="form-group">
+                        <label for="project">Proje</label>
+                        <input type="text" class="form-control" id="project" name="project" />
+                    </div>
+                    <div class="form-group">
+                        <label for="blok">Blok</label>
+                        <input type="text" class="form-control" id="blok" name="blok" placeholder />
+                    </div>
+                    <div class="form-group">
+                        <label for="kapi">Kapı</label>
+                        <input type="text" class="form-control" id="kapi" name="kapi" />
+                    </div>
+                    <div class="form-group">
+                        <label for="kat">Kat</label>
+                        <input type="text" class="form-control" id="kat" name="kat" />
+                    </div>
+                    <div class="form-group">
+                        <label for="oda">Oda</label>
+                        <input type="text" class="form-control" id="oda" name="oda" />
+                    </div>
+                    <div class="form-group">
+                        <label for="m2">M2</label>
+                        <input type="text" class="form-control" id="m2" name="m2" />
+                    </div>
+                    <div class="form-group">
+                        <label for="m2-birim">M2 Birim Fiyatı</label>
+                        <input type="text" class="form-control" id="m2-birim" name="m2-birim" />
+                    </div>
+                    <div class="form-group">
+                        <label for="alinan-pesinat">Alınan Peşinat</label>
+                        <input type="text" class="form-control" id="alinan-pesinat" name="alinan-pesinat" />
+                    </div>
+                    <div class="form-group">
+                        <label for="alim-tarih">Alım Tarihih</label>
+                        <input type="text" class="form-control" id="alim-tarih" name="alim-tarih" />
+                    </div>
+                    <div class="form-group">
+                        <label for="satis-tarih">Satış Tarihi</label>
+                        <input type="text" class="form-control" id="satis-tarih" name="satis-tarih" />
+                    </div>
+                    <div class="form-group">
+                        <label for="satis-fiyat">Satış Fiyatı</label>
+                        <input type="text" class="form-control" id="satis-fiyat" name="satis-fiyat" />
+                    </div>
+                    <div class="form-group">
+                        <label for="taksit-sayisi">Taksit Sayısı</label>
+                        <input type="text" class="form-control" id="taksit-sayisi" name="taksit-sayisi" />
+                    </div>
+                    <div class="form-group">
+                        <label for="taksit-tutari">Taksit Tutarı</label>
+                        <input type="text" class="form-control" id="taksit-tutari" name="taksit-tutari" />
+                    </div>
+                    <div class="form-group">
+                        <label for="yatirimci-verilecek">Yatırımcıya Verilecek</label>
+                        <input type="text" class="form-control" id="yatirimci-verilecek" name="yatirimci-verilecek" />
+                    </div>
+                    <div class="form-group">
+                        <label for="saglam-gruba-kalan">Sağlam Gruba Kalan</label>
+                        <input type="text" class="form-control" id="saglam-gruba-kalan" name="saglam-gruba-kalan" />
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+            <!-- <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Submit</button>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).on("click", "#editEstateBtn", function () {
+
+        var project = $(this).data('project');
+        var blok = $(this).data('blok');
+        var kapi = $(this).data('kapi');
+        var kat = $(this).data('kat');
+        var oda = $(this).data('oda');
+        var m2 = $(this).data('m2');
+        var m2_birim = $(this).data('m2_birim');
+        var alim_tarih = $(this).data('alim_tarih');
+        var pesinat = $(this).data('pesinat');
+        var satis_tarih = $(this).data('satis_tarih');
+        var satis_fiyat = $(this).data('satis_fiyat');
+        var taksit_sayisi = $(this).data('taksit_sayisi');
+        var taksit_tutari = $(this).data('taksit_tutari');
+        var yatirimci_verilecek = $(this).data('yatirimci_verilecek');
+        var saglam_gruba_kalan = $(this).data('saglam_gruba_kalan');
+
+        $(".modal-body #project").val(project);
+        $(".modal-body #blok").val(blok);
+        $(".modal-body #kapi").val(kapi);
+        $(".modal-body #kat").val(kat);
+        $(".modal-body #oda").val(oda);
+        $(".modal-body #m2").val(m2);
+        $(".modal-body #m2-birim").val(m2_birim);
+        $(".modal-body #alim-tarih").val(alim_tarih);
+        $(".modal-body #alinan-pesinat").val(pesinat);
+        $(".modal-body #satis-tarih").val(satis_tarih);
+        $(".modal-body #satis-fiyat").val(satis_fiyat);
+        $(".modal-body #taksit-sayisi").val(taksit_sayisi);
+        $(".modal-body #taksit-tutari").val(taksit_tutari);
+        $(".modal-body #yatirimci-verilecek").val(yatirimci_verilecek);
+        $(".modal-body #saglam-gruba-kalan").val(saglam_gruba_kalan);
+
+    });</script>
+{% endblock %}

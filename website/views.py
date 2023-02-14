@@ -45,15 +45,16 @@ def car():
 
     return render_template('car.html', user=current_user)
 
-#### Fetch Spesific Data #####
-# user = db.get_or_404(Customer, 2)
-# print(user.name)
-
-
-@views.route('/estate', methods=['GET', 'POST'])
+@views.route('/admin', methods=['GET', 'POST'])
 @login_required
-def estate():
-    print(Customer.query.all())
+def admin():
+
+    return render_template('admin.html', user=current_user)
+
+
+@views.route('/estates', methods=['GET', 'POST'])
+@login_required
+def estates():
 
     if request.method == 'POST':
         customer = request.form.get('customer')
@@ -89,28 +90,17 @@ def estate():
         except:
             flash('Please Select User!', category='error')
 
-    return render_template('estate.html', user=current_user, estates=Estate.query.all(), customers=Customer.query.all())
+    return render_template('estates.html', user=current_user, estates=Estate.query.all(), customers=Customer.query.all())
 
+@views.route('/estate', methods=['GET', 'POST'])
+@login_required
+def estate():
+    
+    return render_template('estate.html',user=current_user)
 
 @views.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        customerID = request.form.get('customerID')
-        phone = request.form.get('phone')
-        tc = request.form.get('tc')
-
-        try:
-            new_customer = Customer(
-                name=name, customer_id=customerID, phone=phone, tc=tc)
-            db.session.add(new_customer)  # adding the note to the database
-            db.session.commit()
-            flash('User added!', category='success')
-
-        except:
-            flash('Error while Adding user!', category='error')
-
     # print(Customer.query.filter_by(name='Yaso').first().estates)
 
     return render_template('users.html', user=current_user, customers=Customer.query.all())
@@ -125,8 +115,69 @@ def kado(name):
     return render_template('user.html', user=current_user, customer=Customer.query.filter_by(name=name).first())
 
 
-@views.route('/admin', methods=['GET', 'POST'])
+@views.route('/users/add', methods=['GET', 'POST'])
 @login_required
-def admin():
+def user_add():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        customerid = request.form.get('customerid')
+        phone = request.form.get('phone')
+        tc = request.form.get('tc')
 
-    return render_template('admin.html', user=current_user)
+        try:
+            new_customer = Customer(
+                name=name, customer_id=customerid, phone=phone, tc=tc)
+            db.session.add(new_customer)  # adding the note to the database
+            db.session.commit()
+            flash('User added!', category='success')
+            return 'OK'
+
+        except:
+            flash('Error while Adding user!', category='error')
+            return 'Fail'
+
+
+@views.route('/users/edit/', methods=['POST'])
+@login_required
+def edit():
+    if request.method == 'POST':
+        try:
+            user_id = request.form.get('user_id')
+            name = request.form.get('name')
+            customerid = request.form.get('customerid')
+            phone = request.form.get('phone')
+            tc = request.form.get('tc')
+
+            customer = Customer.query.filter_by(id=user_id).first()
+
+            customer.name = name
+            customer.customer_id = customerid
+            customer.phone = phone
+            customer.tc = tc
+            db.session.commit()
+            flash('User Succesfully Edited!', category='success')
+
+            return 'OK'
+
+        except:
+            flash('Error while Editing User!', category='error')
+
+            return 'Fail'
+
+
+@views.route('/users/delete/<int:id>', methods=['POST'])
+@login_required
+def delete(id):
+    if request.method == "POST":
+        try:
+            customer = db.get_or_404(Customer, id)
+            db.session.delete(customer)
+            db.session.commit()
+            flash('User Succesfully Deleted!', category='success')
+
+            return 'OK'
+
+        except:
+            flash('Error while Deleting User!', category='error')
+
+            return 'Fail'

@@ -1,11 +1,11 @@
 {% extends "base.html" %}
 {% block title %} Users {% endblock%}
 {% block content%}
+<br>
 <h1 align="center">Kişiler</h1>
 <br>
 
-<a href="" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#adduser"> Add
-    User</a>
+<button id="addUserBtn" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#adduser"> Add User </button>
 
 <br>
 <br>
@@ -34,15 +34,19 @@
             <td>{{ customer.tc }}</td>
 
             <td>
-                <button id="editUserBtn" href="#editUserModal" class="btn btn-link btn-xs" data-bs-toggle="modal"
-                    data-bs-target="#editUserModal" data-name="{{ customer.name }}"
-                    data-customerid="{{ customer.customer_id }}" data-phone="{{ customer.phone }}"
-                    data-tc="{{ customer.tc }}"> Edit
+                <button id="editUserBtn" href="#editUserModal" class="btn btn-outline-primary btn-xs"
+                    data-bs-toggle="modal" data-bs-target="#editUserModal" data-user_id="{{ customer.id }}"
+                    data-name="{{ customer.name }}" data-customerid="{{ customer.customer_id }}"
+                    data-phone="{{ customer.phone }}" data-tc="{{ customer.tc }}"> Edit
                 </button>
 
-                <button id="detailsBtn" href="" data-customer="{{ customer.name }}" class="btn btn-link btn-xs"> Details
+                <button id="detailsBtn" href="" data-customer="{{ customer.name }}" class="btn btn-outline-info btn-xs">
+                    Details
                 </button>
 
+                <button id="deleteUserBtn" href="#deleteUserModal" class="btn btn-sm btn-outline-danger"
+                    data-customer_id="{{ customer.id }}">
+                    Delete </button>
             </td>
         </tr>
 
@@ -63,7 +67,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="POST">
+                <form id="addUserForm">
 
 
                     <div class="form-group">
@@ -97,7 +101,6 @@
 </div>
 
 
-
 <!--Edit User Modal -->
 <div class="modal fade" id="editUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -107,9 +110,11 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit User</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form method="POST">
-
+            <div id="modal-body-edit" class="modal-body">
+                <form id="editUserForm">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="user_id" name="user_id" hidden />
+                    </div>
 
                     <div class="form-group">
                         <label for="name">İsim</label>
@@ -129,8 +134,9 @@
                         <input type="text" class="form-control" id="tc" name="tc" />
                     </div>
 
+
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Submit</button>
                 </form>
             </div>
             <!-- <div class="modal-footer">
@@ -141,10 +147,39 @@
     </div>
 </div>
 
-<script>
 
+<!--Delete User Modal -->
+<div class="modal fade" id="deleteUserModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit User</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+
+
+                Are You Sure?
+                <br>
+                <br>
+
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
+
+            </div>
+            <!-- <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div> -->
+        </div>
+    </div>
+</div>
+
+<script>
+    //////////// Datatables CDN ////////////////////
     // $(document).ready(function () {
-    //     ////////// Datatables CDN ////////////////////
     //     var table = $('#userTable').DataTable();
     //     $('#userTable tbody').on('click', 'tr', function () {
     //         var data = table.row(this).data();
@@ -152,31 +187,67 @@
     //         window.location.href = `/users/${data[1]}`
     //         // alert('You clicked on ' + data[0] + "'s row");
     //     });
-    //     //////////////////////////////////////////////
-
     // });
+    ////////////////////////////////////////////////
+
+    $(document).on("submit", "#addUserForm", function () {
+        $.ajax({
+            type: 'POST',
+            url: `/users/add`,
+            data: $(this).serialize(),
+        }).done(function (response) {
+            // location.reload();
+            // console.log(response);
+
+        });
+    });
 
     $(document).on("click", "#detailsBtn", function () {
-
         var name = $(this).data('customer');
-
         window.location.href = `/users/${name}`
+    });
 
-
+    $(document).on("click", "#deleteUserBtn", function () {
+        var customer_id = $(this).data('customer_id');
+        $.ajax({
+            type: 'POST',
+            url: `/users/delete/${customer_id}`,
+            data: $(this).serialize(),
+        }).done(function (response) {
+            location.reload();
+        });
     });
 
     $(document).on("click", "#editUserBtn", function () {
 
+        var user_id = $(this).data('user_id');
         var name = $(this).data('name');
         var customer_id = $(this).data('customerid');
         var phone = $(this).data('phone');
         var tc = $(this).data('tc');
 
-        $(".modal-body #name").val(name);
-        $(".modal-body #customerid").val(customer_id);
-        $(".modal-body #phone").val(phone);
-        $(".modal-body #tc").val(tc);
+        $("#modal-body-edit #user_id").val(user_id);
+        $("#modal-body-edit #name").val(name);
+        $("#modal-body-edit #customerid").val(customer_id);
+        $("#modal-body-edit #phone").val(phone);
+        $("#modal-body-edit #tc").val(tc);
+    });
 
+    $('#editUserForm').submit(function (e) {
+        /////////////////////// UTIL ////////////////////////////
+        // var user_id = $(this).data('user_id');
+        // var data = $('#editUserForm').serializeArray();
+        // data.push({ name: 'user_id', value: user_id })
+        // console.log(data);
+        ////////////////////////////////////////////////////////
+        // e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: `/users/edit/`,
+            data: $(this).serialize(),
+        }).done(function (response) {
+            console.log(response);
+        });
     });
 </script>
 {% endblock %}

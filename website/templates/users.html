@@ -5,7 +5,8 @@
 <h1 align="center">Kişiler</h1>
 <br>
 
-<button id="addUserBtn" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#adduser"> Add User </button>
+<button id="addUserBtn" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#adduser"> Add User
+</button>
 
 <br>
 <br>
@@ -13,12 +14,12 @@
 <table id="userTable" class="table table-bordered table-condensed table-striped table-hover">
     <thead>
         <tr>
-            <th scope="col">#</th>
-            <th scope="col">İsim</th>
-            <th scope="col">Müşteri No</th>
-            <th scope="col">Telefon</th>
-            <th scope="col">Tc Kimlik</th>
-            <th scope="col"></th>
+            <th style="text-align:center" scope="col">#</th>
+            <th style="text-align:center" scope="col">İsim</th>
+            <th style="text-align:center" scope="col">Müşteri No</th>
+            <th style="text-align:center" scope="col">Telefon</th>
+            <th style="text-align:center" scope="col">Tc Kimlik</th>
+            <th style="text-align:center" scope="col"></th>
         </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -27,11 +28,11 @@
         {% for customer in customers %}
 
         <tr>
-            <th scope="row">{{ loop.index }}</th>
-            <td>{{ customer.name }} </td>
-            <td>{{ customer.customer_id }}</td>
-            <td>{{ customer.phone }}</td>
-            <td>{{ customer.tc }}</td>
+            <th scope="row" style="text-align:center">{{ loop.index }}</th>
+            <td style="text-align:center">{{ customer.name }} </td>
+            <td style="text-align:center">{{ customer.customer_id }}</td>
+            <td style="text-align:center">{{ customer.phone }}</td>
+            <td style="text-align:center">{{ customer.tc }}</td>
 
             <td>
                 <button id="editUserBtn" href="#editUserModal" class="btn btn-outline-primary btn-xs"
@@ -40,12 +41,11 @@
                     data-phone="{{ customer.phone }}" data-tc="{{ customer.tc }}"> Edit
                 </button>
 
-                <button id="detailsBtn" href="" data-customer="{{ customer.name }}" class="btn btn-outline-info btn-xs">
+                <button id="detailsUserBtn" class="btn btn-outline-info btn-xs" data-user_id="{{ customer.id }}">
                     Details
                 </button>
 
-                <button id="deleteUserBtn" href="#deleteUserModal" class="btn btn-sm btn-outline-danger"
-                    data-customer_id="{{ customer.id }}">
+                <button id="deleteUserBtn" class="btn btn-sm btn-outline-danger" data-user_id="{{ customer.id }}">
                     Delete </button>
             </td>
         </tr>
@@ -202,9 +202,9 @@
         });
     });
 
-    $(document).on("click", "#detailsBtn", function () {
-        var name = $(this).data('customer');
-        window.location.href = `/users/${name}`
+    $(document).on("click", "#detailsUserBtn", function () {
+        var user_id = $(this).data('user_id');
+        window.location.href = `/users/${user_id}`
     });
 
     $(document).on("click", "#deleteUserBtn", function () {

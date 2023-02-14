@@ -29,43 +29,37 @@
             <th scope="col" style="text-align:center">Sağlam Gruba Kalan</th>
             <th scope="col" style="text-align:center"></th>
             <!-- <th scope="col">Taksit Sayısı</th> -->
-
-
         </tr>
     </thead>
     <tbody>
-
         {% set counter = 0 %}
         {% for estate in estates %}
-
         <tr>
             <th scope="row"> {{ loop.index }}</th>
-
-
             {% if customers %}
             <!-- Anlamadim neden customers[1] yada customers[0] verdigimizde calisiyor -->
-            <td>{{ customers[0].query.filter_by(id=estate.customer_id).first().name }} </td>
+            <td style="text-align:center">{{ customers[0].query.filter_by(id=estate.customer_id).first().name }} </td>
             {% else %}
             <td> Error Var </td>
             {% endif %}
 
-            <td>{{ estate.project }} </td>
-            <td>{{ estate.blok }}</td>
-            <td>{{ estate.kapi }}</td>
-            <td>{{ estate.kat }}</td>
-            <td>{{ estate.oda }}</td>
-            <td>{{ estate.m2 }}</td>
-            <td>{{ estate.m2_birim }}</td>
-            <td>{{ estate.alim_tarih }}</td>
-            <td>{{ estate.satis_tarih }}</td>
-            <td>{{ estate.satis_fiyat }}</td>
+            <td style="text-align:center">{{ estate.project }} </td>
+            <td style="text-align:center">{{ estate.blok }}</td>
+            <td style="text-align:center">{{ estate.kapi }}</td>
+            <td style="text-align:center">{{ estate.kat }}</td>
+            <td style="text-align:center">{{ estate.oda }}</td>
+            <td style="text-align:center">{{ estate.m2 }}</td>
+            <td style="text-align:center">{{ estate.m2_birim }}</td>
+            <td style="text-align:center">{{ estate.alim_tarih }}</td>
+            <td style="text-align:center">{{ estate.satis_tarih }}</td>
+            <td style="text-align:center">{{ estate.satis_fiyat }}</td>
+            <td style="text-align:center">{{ estate.taksit_tutari | int * estate.taksit_sayisi | int }}</td>
+            <td style="text-align:center">{{ estate.yatirimci_verilecek }}</td>
+            <td style="text-align:center">{{ estate.saglam_gruba_kalan }}</td>
             <!-- <td>{{ estate.taksit_sayisi }}</td> -->
-            <td>{{ estate.taksit_tutari | int * estate.taksit_sayisi | int }}</td>
-            <td>{{ estate.yatirimci_verilecek }}</td>
-            <td>{{ estate.saglam_gruba_kalan }}</td>
 
             <td>
-                <button id="editEstateBtn" href="#editEstateModal" class="btn btn-link btn-sm"
+                <button id="editEstateBtn" href="#editEstateModal" class="btn btn-outline-primary btn-sm"
                     data-bs-target="#editEstateModal" data-estate_id="{{ estate.id }}"
                     data-project="{{ estate.project }}" data-blok="{{ estate.blok }}" data-kapi="{{ estate.kapi }}"
                     data-kat="{{ estate.kat }}" data-oda="{{ estate.oda }}" data-m2="{{ estate.m2 }}"
@@ -75,27 +69,16 @@
                     data-yatirimci_verilecek="{{ estate.yatirimci_verilecek }}"
                     data-saglam_gruba_kalan="{{ estate.saglam_gruba_kalan }}" data-bs-toggle="modal"> Edit
                 </button>
-
-                <button type="button" id="deleteEstateBtn" href="#deleteEstateModal"
-                    class="btn  btn-sm btn-outline-primary">
-                    Details </button>
-                <button type="button" id="deleteEstateBtn" href="#deleteEstateModal"
-                    class="btn  btn-sm btn-outline-danger">
-                    Delete </button>
-
-
+                <button type="button" id="detailsEstateBtn" class="btn btn-outline-info btn-sm"
+                    data-estate_id="{{ estate.id }}">Details </button>
+                <button type="button" id="deleteEstateBtn" class="btn btn-sm btn-outline-danger"
+                    data-estate_id="{{ estate.id }}">Delete</button>
                 <!-- 
                 <button type="button" class="btn btn-outline-danger" data-bs-target="#deleteEstateModal"
                     data-bs-toggle="modal">Delete</button> -->
-
             </td>
-
         </tr>
         {% endfor %}
-
-
-
-
     </tbody>
 </table>
 
@@ -192,7 +175,6 @@
 
             </div>
             <div class="modal-footer">
-
             </div>
         </div>
     </div>
@@ -207,10 +189,12 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit Estate</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form method="POST" action="http://127.0.0.1:5000/edit/estate/">
+            <div id="modal-body-edit" class="modal-body">
+                <form id="editEstateForm">
 
-
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="estate_id" name="estate_id" hidden />
+                    </div>
                     <div class="form-group">
                         <label for="project">Proje</label>
                         <input type="text" class="form-control" id="project" name="project" />
@@ -312,7 +296,7 @@
             </div> -->
 </div>
 </div>
-</div> -->
+</div>
 
 
 
@@ -347,23 +331,58 @@
         var yatirimci_verilecek = $(this).data('yatirimci_verilecek');
         var saglam_gruba_kalan = $(this).data('saglam_gruba_kalan');
 
-        $(".modal-body #project").val(project);
-        $(".modal-body #blok").val(blok);
-        $(".modal-body #kapi").val(kapi);
-        $(".modal-body #kat").val(kat);
-        $(".modal-body #oda").val(oda);
-        $(".modal-body #m2").val(m2);
-        $(".modal-body #m2-birim").val(m2_birim);
-        $(".modal-body #alim-tarih").val(alim_tarih);
-        $(".modal-body #satis-tarih").val(satis_tarih);
-        $(".modal-body #satis-fiyat").val(satis_fiyat);
-        $(".modal-body #taksit-sayisi").val(taksit_sayisi);
-        $(".modal-body #taksit-tutari").val(taksit_tutari);
-        $(".modal-body #yatirimci-verilecek").val(yatirimci_verilecek);
-        $(".modal-body #saglam-gruba-kalan").val(saglam_gruba_kalan);
+        $("#modal-body-edit #estate_id").val(estate_id);
+        $("#modal-body-edit #project").val(project);
+        $("#modal-body-edit #blok").val(blok);
+        $("#modal-body-edit #kapi").val(kapi);
+        $("#modal-body-edit #kat").val(kat);
+        $("#modal-body-edit #oda").val(oda);
+        $("#modal-body-edit #m2").val(m2);
+        $("#modal-body-edit #m2-birim").val(m2_birim);
+        $("#modal-body-edit #alim-tarih").val(alim_tarih);
+        $("#modal-body-edit #satis-tarih").val(satis_tarih);
+        $("#modal-body-edit #satis-fiyat").val(satis_fiyat);
+        $("#modal-body-edit #taksit-sayisi").val(taksit_sayisi);
+        $("#modal-body-edit #taksit-tutari").val(taksit_tutari);
+        $("#modal-body-edit #yatirimci-verilecek").val(yatirimci_verilecek);
+        $("#modal-body-edit #saglam-gruba-kalan").val(saglam_gruba_kalan);
 
     });
 
+    $(document).on("click", "#detailsEstateBtn", function () {
+        var estate_id = $(this).data('estate_id');
+        window.location.href = `/estates/${estate_id}`
+    });
+
+
+    $('#editEstateForm').submit(function (e) {
+        /////////////////////// UTIL ////////////////////////////
+        // var user_id = $(this).data('user_id');
+        // var data = $('#editUserForm').serializeArray();
+        // data.push({ name: 'user_id', value: user_id })
+        // console.log(data);
+        ////////////////////////////////////////////////////////
+        // e.preventDefault();
+        $.ajax({
+            type: 'POST',
+            url: `/estates/edit`,
+            data: $(this).serialize(),
+        }).done(function (response) {
+            console.log(response);
+        });
+    });
+
+
+    $(document).on("click", "#deleteEstateBtn", function () {
+        var estate_id = $(this).data('estate_id');
+        $.ajax({
+            type: 'POST',
+            url: `/estates/delete/${estate_id}`,
+            data: $(this).serialize(),
+        }).done(function (response) {
+            location.reload();
+        });
+    });
 
 </script>
 

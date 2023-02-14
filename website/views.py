@@ -45,6 +45,7 @@ def car():
 
     return render_template('car.html', user=current_user)
 
+
 @views.route('/admin', methods=['GET', 'POST'])
 @login_required
 def admin():
@@ -57,7 +58,7 @@ def admin():
 def estates():
 
     if request.method == 'POST':
-        customer = request.form.get('customer')
+        name = request.form.get('customer')
         project = request.form.get('project')
         blok = request.form.get('blok')
         kapi = request.form.get('kapi')
@@ -75,7 +76,7 @@ def estates():
         saglam_gruba_kalan = request.form.get('saglam-gruba-kalan')
 
         try:
-            customer_id = Customer.query.filter_by(name=customer).first().id
+            customer_id = Customer.query.filter_by(name=name).first().id
 
             new_estate = Estate(project=project, blok=blok, customer_id=customer_id,
                                 kapi=kapi, kat=kat, oda=oda,
@@ -92,11 +93,90 @@ def estates():
 
     return render_template('estates.html', user=current_user, estates=Estate.query.all(), customers=Customer.query.all())
 
-@views.route('/estate', methods=['GET', 'POST'])
+
+@views.route('/estates/<int:id>', methods=['GET', 'POST'])
 @login_required
-def estate():
-    
-    return render_template('estate.html',user=current_user)
+def estate(id):
+
+    return render_template('estate.html', user=current_user, estate=Estate.query.filter_by(id=id).first())
+
+
+@views.route('/estates/add', methods=['POST'])
+@login_required
+def add_estate():
+    pass
+
+
+@views.route('/estates/edit', methods=['POST'])
+@login_required
+def edit_estate():
+    if request.method == 'POST':
+        try:
+            estate_id = request.form.get('estate_id')
+            name = request.form.get('customer')
+            project = request.form.get('project')
+            blok = request.form.get('blok')
+            kapi = request.form.get('kapi')
+            kat = request.form.get('kat')
+            oda = request.form.get('oda')
+            m2 = request.form.get('m2')
+            m2_birim = request.form.get('m2-birim')
+            alinan_pesinat = request.form.get('alinan-pesinat')
+            alim_tarih = request.form.get('alim-tarih')
+            satis_tarih = request.form.get('satis-tarih')
+            satis_fiyat = request.form.get('satis-fiyat')
+            taksit_sayisi = request.form.get('taksit-sayisi')
+            taksit_tutari = request.form.get('taksit-tutari')
+            yatirmci_verilecek = request.form.get('yatirimci-verilecek')
+            saglam_gruba_kalan = request.form.get('saglam-gruba-kalan')
+
+            estate = Estate.query.filter_by(id=estate_id).first()
+
+            estate.name = name
+            estate.project = project
+            estate.blok = blok
+            estate.kapi = kapi
+            estate.kat = kat
+            estate.oda = oda
+            estate.m2 = m2
+            estate.m2_birim = m2_birim
+            estate.alinan_pesinat = alinan_pesinat
+            estate.alim_tarih = alim_tarih
+            estate.satis_tarih = satis_tarih
+            estate.satis_fiyat = satis_fiyat
+            estate.taksit_sayisi = taksit_sayisi
+            estate.taksit_tutari = taksit_tutari
+            estate.yatirmci_verilecek = yatirmci_verilecek
+            estate.saglam_gruba_kalan = saglam_gruba_kalan
+
+            db.session.commit()
+            flash('User Succesfully Edited!', category='success')
+
+            return 'OK'
+
+        except:
+            flash('Error while Editing User!', category='error')
+
+            return 'Fail'
+
+
+@views.route('/estates/delete/<int:id>', methods=['POST'])
+@login_required
+def delete_estate(id):
+    if request.method == "POST":
+        try:
+            estate = db.get_or_404(Estate, id)
+            db.session.delete(estate)
+            db.session.commit()
+            flash('Estate Succesfully Deleted!', category='success')
+
+            return 'OK'
+
+        except:
+            flash('Error while Deleting Estate!', category='error')
+
+            return 'Fail'
+
 
 @views.route('/users', methods=['GET', 'POST'])
 @login_required
@@ -106,16 +186,15 @@ def users():
     return render_template('users.html', user=current_user, customers=Customer.query.all())
 
 
-@views.route('/users/<name>', methods=['GET', 'POST'])
+@views.route('/users/<int:id>', methods=['GET', 'POST'])
 @login_required
-def kado(name):
+def user(id):
+    # print(Customer.query.filter_by(name=name).first().estates)
 
-    print(Customer.query.filter_by(name=name).first().estates)
-
-    return render_template('user.html', user=current_user, customer=Customer.query.filter_by(name=name).first())
+    return render_template('user.html', user=current_user, customer=Customer.query.filter_by(id=id).first())
 
 
-@views.route('/users/add', methods=['GET', 'POST'])
+@views.route('/users/add', methods=['POST'])
 @login_required
 def user_add():
     if request.method == 'POST':
@@ -139,7 +218,7 @@ def user_add():
 
 @views.route('/users/edit/', methods=['POST'])
 @login_required
-def edit():
+def user_edit():
     if request.method == 'POST':
         try:
             user_id = request.form.get('user_id')
@@ -167,7 +246,7 @@ def edit():
 
 @views.route('/users/delete/<int:id>', methods=['POST'])
 @login_required
-def delete(id):
+def user_delete(id):
     if request.method == "POST":
         try:
             customer = db.get_or_404(Customer, id)

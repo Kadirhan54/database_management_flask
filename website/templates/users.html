@@ -1,61 +1,64 @@
 {% extends "base.html" %}
 {% block title %} Users {% endblock%}
 {% block content%}
-<br>
-<h1 align="center">Kişiler</h1>
-<br>
 
-<button id="addUserBtn" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#adduser"> Add User
-</button>
+<div class="container">
+    <br>
+    <h1 align="center">Kişiler</h1>
+    <br>
+    <button id="addUserBtn" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#adduser"> Add User
+    </button>
+    <br>
+    <br>
+    <table id="userTable" class="table table-bordered table-condensed table-striped table-hover">
+        <caption>List of users</caption>
 
-<br>
-<br>
+        <thead>
+            <tr>
+                <th style="text-align:center" scope="col">#</th>
+                <th style="text-align:center" scope="col">İsim</th>
+                <th style="text-align:center" scope="col">Müşteri No</th>
+                <th style="text-align:center" scope="col">Telefon</th>
+                <th style="text-align:center" scope="col">Tc Kimlik</th>
+                <th style="text-align:center" scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
 
-<table id="userTable" class="table table-bordered table-condensed table-striped table-hover">
-    <thead>
-        <tr>
-            <th style="text-align:center" scope="col">#</th>
-            <th style="text-align:center" scope="col">İsim</th>
-            <th style="text-align:center" scope="col">Müşteri No</th>
-            <th style="text-align:center" scope="col">Telefon</th>
-            <th style="text-align:center" scope="col">Tc Kimlik</th>
-            <th style="text-align:center" scope="col"></th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
+            {% set counter = 0 %}
+            {% for customer in customers %}
 
-        {% set counter = 0 %}
-        {% for customer in customers %}
+            <tr>
+                <th scope="row" style="text-align:center">{{ loop.index }}</th>
+                <td style="text-align:center">{{ customer.name }} </td>
+                <td style="text-align:center">{{ customer.customer_id }}</td>
+                <td style="text-align:center">{{ customer.phone }}</td>
+                <td style="text-align:center">{{ customer.tc }}</td>
 
-        <tr>
-            <th scope="row" style="text-align:center">{{ loop.index }}</th>
-            <td style="text-align:center">{{ customer.name }} </td>
-            <td style="text-align:center">{{ customer.customer_id }}</td>
-            <td style="text-align:center">{{ customer.phone }}</td>
-            <td style="text-align:center">{{ customer.tc }}</td>
+                <td>
+                    <button id="editUserBtn" href="#editUserModal" class="btn btn-outline-primary btn-xs"
+                        data-bs-toggle="modal" data-bs-target="#editUserModal" data-user_id="{{ customer.id }}"
+                        data-name="{{ customer.name }}" data-customerid="{{ customer.customer_id }}"
+                        data-phone="{{ customer.phone }}" data-tc="{{ customer.tc }}"> Edit
+                    </button>
 
-            <td>
-                <button id="editUserBtn" href="#editUserModal" class="btn btn-outline-primary btn-xs"
-                    data-bs-toggle="modal" data-bs-target="#editUserModal" data-user_id="{{ customer.id }}"
-                    data-name="{{ customer.name }}" data-customerid="{{ customer.customer_id }}"
-                    data-phone="{{ customer.phone }}" data-tc="{{ customer.tc }}"> Edit
-                </button>
+                    <button id="detailsUserBtn" class="btn btn-outline-info btn-xs" data-user_id="{{ customer.id }}">
+                        Details
+                    </button>
 
-                <button id="detailsUserBtn" class="btn btn-outline-info btn-xs" data-user_id="{{ customer.id }}">
-                    Details
-                </button>
+                    <button id="deleteUserBtn" data-bs-target="#deleteUserModal" data-bs-toggle="modal"
+                        class="btn btn-sm btn-outline-danger" data-user_id="{{ customer.id }}">
+                        Delete </button>
+                </td>
+            </tr>
 
-                <button id="deleteUserBtn" class="btn btn-sm btn-outline-danger" data-user_id="{{ customer.id }}">
-                    Delete </button>
-            </td>
-        </tr>
-
-        {% endfor %}
+            {% endfor %}
 
 
-    </tbody>
+        </tbody>
 
-</table>
+    </table>
+</div>
 
 <!-- Add User Modal -->
 <div class="modal fade" id="adduser" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -157,17 +160,17 @@
                 <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit User</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-
-
-
-                Are You Sure?
-                <br>
-                <br>
-
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Submit</button>
-
+            <div id="modal-body-delete" class="modal-body">
+                <form id="deleteUserForm">
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="user_id" name="user_id" hidden/>
+                    </div>
+                    Are You Sure?
+                    <br>
+                    <br>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" id="deleteUserConfirmBtn" class="btn btn-primary">Submit</button>
+                </form>
             </div>
             <!-- <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -207,17 +210,6 @@
         window.location.href = `/users/${user_id}`
     });
 
-    $(document).on("click", "#deleteUserBtn", function () {
-        var customer_id = $(this).data('customer_id');
-        $.ajax({
-            type: 'POST',
-            url: `/users/delete/${customer_id}`,
-            data: $(this).serialize(),
-        }).done(function (response) {
-            location.reload();
-        });
-    });
-
     $(document).on("click", "#editUserBtn", function () {
 
         var user_id = $(this).data('user_id');
@@ -249,5 +241,25 @@
             console.log(response);
         });
     });
+
+    $(document).on("click", "#deleteUserBtn", function () {
+        var user_id = $(this).data('user_id');
+        $("#modal-body-delete #user_id").val(user_id);
+    });
+
+    $('#deleteUserForm').submit(function (e) {
+        $.ajax({
+            type: 'POST',
+            url: `/users/delete`,
+            data: $(this).serialize(),
+        }).done(function (response) {
+            location.reload();
+        });
+    });
+
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+
 </script>
 {% endblock %}

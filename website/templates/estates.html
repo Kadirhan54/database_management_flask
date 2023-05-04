@@ -1,86 +1,93 @@
 {% extends "base.html" %}
 {% block title %} Estate {% endblock%}
 {% block content%}
-
 <br>
 <h1 align="center">Emlaklar</h1>
-<a id="addEstateBtn" href="" class="btn btn-primary btn-xs" data-bs-toggle="modal" data-bs-target="#addEstateModal"> Add
-    Estate</a>
 <br>
 <br>
+<div class="container-fluid">
+    <table id="estateTable" class="table table-sm table-bordered table-condensed table-striped table-hover">
+        <caption>List of estates</caption>
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col" style="text-align:center">Sahibi</th>
+                <th scope="col" style="text-align:center">Proje</th>
+                <th scope="col" style="text-align:center">Blok</th>
+                <th scope="col" style="text-align:center">Kapı</th>
+                <th scope="col" style="text-align:center">Kat</th>
+                <th scope="col" style="text-align:center">Oda</th>
+                <th scope="col" style="text-align:center">M2</th>
+                <th scope="col" style="text-align:center">M2 Birim Fİyatı</th>
+                <th scope="col" style="text-align:center">Peşinat</th>
+                <th scope="col" style="text-align:center">Alım Tarihi</th>
+                <th scope="col" style="text-align:center">Satış Tarihi</th>
+                <th scope="col" style="text-align:center">Satış Fiyatı</th>
+                <th scope="col" style="text-align:center">Taksit Sayısı</th>
+                <th scope="col" style="text-align:center">Taksit Tutarı</th>
+                <th scope="col" style="text-align:center">Yatırımcıya Verilecek</th>
+                <th scope="col" style="text-align:center">Sağlam Gruba Kalan</th>
+                <th scope="col" style="text-align:left">
+                    <button id="addEstateBtn" href="" class="btn btn-primary btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#addEstateModal">Add Estate</button>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            {% set counter = 0 %}
+            {% for estate in estates %}
+            <tr>
+                <th scope="row"> {{ loop.index }}</th>
+                {% if customers %}
+                <!-- Anlamadim neden customers[1] yada customers[0] verdigimizde calisiyor -->
+                <td style="text-align:center">{{ customers[0].query.filter_by(id=estate.customer_id).first().name }}
+                </td>
+                {% else %}
+                <td> Error Var </td>
+                {% endif %}
 
-<table id="estateTable" class="table table-sm table-bordered table-condensed table-striped table-hover">
-    <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col" style="text-align:center">Sahibi</th>
-            <th scope="col" style="text-align:center">Proje</th>
-            <th scope="col" style="text-align:center">Blok</th>
-            <th scope="col" style="text-align:center">Kapı</th>
-            <th scope="col" style="text-align:center">Kat</th>
-            <th scope="col" style="text-align:center">Oda</th>
-            <th scope="col" style="text-align:center">M2</th>
-            <th scope="col" style="text-align:center">M2 Birim Fİyatı</th>
-            <th scope="col" style="text-align:center">Alım Tarihi</th>
-            <th scope="col" style="text-align:center">Satış Tarihi</th>
-            <th scope="col" style="text-align:center">Satış Fiyatı</th>
-            <th scope="col" style="text-align:center">Taksit Tutarı</th>
-            <th scope="col" style="text-align:center">Yatırımcıya Verilecek</th>
-            <th scope="col" style="text-align:center">Sağlam Gruba Kalan</th>
-            <th scope="col" style="text-align:center"></th>
-            <!-- <th scope="col">Taksit Sayısı</th> -->
-        </tr>
-    </thead>
-    <tbody>
-        {% set counter = 0 %}
-        {% for estate in estates %}
-        <tr>
-            <th scope="row"> {{ loop.index }}</th>
-            {% if customers %}
-            <!-- Anlamadim neden customers[1] yada customers[0] verdigimizde calisiyor -->
-            <td style="text-align:center">{{ customers[0].query.filter_by(id=estate.customer_id).first().name }} </td>
-            {% else %}
-            <td> Error Var </td>
-            {% endif %}
+                <td style="text-align:center">{{ estate.project }} </td>
+                <td style="text-align:center">{{ estate.blok }}</td>
+                <td style="text-align:center">{{ estate.kapi }}</td>
+                <td style="text-align:center">{{ estate.kat }}</td>
+                <td style="text-align:center">{{ estate.oda }}</td>
+                <td style="text-align:center">{{ estate.m2 }}</td>
+                <td style="text-align:center">{{ estate.m2_birim }}</td>
+                <td style="text-align:center">{{ estate.pesinat }}</td>
+                <td style="text-align:center">{{ estate.alim_tarih }}</td>
+                <td style="text-align:center">{{ estate.satis_tarih }}</td>
+                <td style="text-align:center">{{ estate.satis_fiyat }}</td>
+                <td style="text-align:center">{{ estate.taksit_sayisi }}</td>
+                <td style="text-align:center">{{ estate.taksit_tutari }}</td>
+                <!-- <td style="text-align:center">{{ estate.taksit_tutari | int * estate.taksit_sayisi | int }}</td> -->
+                <td style="text-align:center">{{ estate.yatirimci_verilecek }}</td>
+                <td style="text-align:center">{{ estate.saglam_gruba_kalan }}</td>
 
-            <td style="text-align:center">{{ estate.project }} </td>
-            <td style="text-align:center">{{ estate.blok }}</td>
-            <td style="text-align:center">{{ estate.kapi }}</td>
-            <td style="text-align:center">{{ estate.kat }}</td>
-            <td style="text-align:center">{{ estate.oda }}</td>
-            <td style="text-align:center">{{ estate.m2 }}</td>
-            <td style="text-align:center">{{ estate.m2_birim }}</td>
-            <td style="text-align:center">{{ estate.alim_tarih }}</td>
-            <td style="text-align:center">{{ estate.satis_tarih }}</td>
-            <td style="text-align:center">{{ estate.satis_fiyat }}</td>
-            <td style="text-align:center">{{ estate.taksit_tutari | int * estate.taksit_sayisi | int }}</td>
-            <td style="text-align:center">{{ estate.yatirimci_verilecek }}</td>
-            <td style="text-align:center">{{ estate.saglam_gruba_kalan }}</td>
-            <!-- <td>{{ estate.taksit_sayisi }}</td> -->
-
-            <td>
-                <button id="editEstateBtn" href="#editEstateModal" class="btn btn-outline-primary btn-sm"
-                    data-bs-target="#editEstateModal" data-estate_id="{{ estate.id }}"
-                    data-project="{{ estate.project }}" data-blok="{{ estate.blok }}" data-kapi="{{ estate.kapi }}"
-                    data-kat="{{ estate.kat }}" data-oda="{{ estate.oda }}" data-m2="{{ estate.m2 }}"
-                    data-m2_birim="{{ estate.m2_birim }}" data-alim_tarih="{{ estate.alim_tarih }}"
-                    data-satis_tarih="{{ estate.satis_tarih }}" data-satis_fiyat="{{ estate.satis_fiyat }}"
-                    data-taksit_sayisi="{{ estate.taksit_sayisi }}" data-taksit_tutari="{{ estate.taksit_tutari }}"
-                    data-yatirimci_verilecek="{{ estate.yatirimci_verilecek }}"
-                    data-saglam_gruba_kalan="{{ estate.saglam_gruba_kalan }}" data-bs-toggle="modal"> Edit
-                </button>
-                <button type="button" id="detailsEstateBtn" class="btn btn-outline-info btn-sm"
-                    data-estate_id="{{ estate.id }}">Details </button>
-                <button type="button" id="deleteEstateBtn" class="btn btn-sm btn-outline-danger"
-                    data-estate_id="{{ estate.id }}">Delete</button>
-                <!-- 
+                <td>
+                    <button id="editEstateBtn" href="#editEstateModal" class="btn btn-outline-secondary btn-sm"
+                        data-bs-target="#editEstateModal" data-estate_id="{{ estate.id }}"
+                        data-project="{{ estate.project }}" data-blok="{{ estate.blok }}" data-kapi="{{ estate.kapi }}"
+                        data-kat="{{ estate.kat }}" data-oda="{{ estate.oda }}" data-m2="{{ estate.m2 }}"
+                        data-m2_birim="{{ estate.m2_birim }}" data-alim_tarih="{{ estate.alim_tarih }}"
+                        data-satis_tarih="{{ estate.satis_tarih }}" data-satis_fiyat="{{ estate.satis_fiyat }}"
+                        data-taksit_sayisi="{{ estate.taksit_sayisi }}" data-taksit_tutari="{{ estate.taksit_tutari }}"
+                        data-yatirimci_verilecek="{{ estate.yatirimci_verilecek }}"
+                        data-saglam_gruba_kalan="{{ estate.saglam_gruba_kalan }}" data-bs-toggle="modal"> Edit
+                    </button>
+                    <button type="button" id="detailsEstateBtn" class="btn btn-outline-info btn-sm"
+                        data-estate_id="{{ estate.id }}">Details </button>
+                    <button type="button" id="deleteEstateBtn" data-bs-target="#deleteEstateModal"
+                        data-bs-toggle="modal" class="btn btn-sm btn-outline-danger"
+                        data-estate_id="{{ estate.id }}">Delete</button>
+                    <!-- 
                 <button type="button" class="btn btn-outline-danger" data-bs-target="#deleteEstateModal"
                     data-bs-toggle="modal">Delete</button> -->
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
 <!-- Add Estate Modal -->
 <div class="modal fade" id="addEstateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
@@ -190,7 +197,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div id="modal-body-edit" class="modal-body">
-                <form id="editEstateForm">
+                <form id="editEstateForm" method="POST">
 
                     <div class="form-group">
                         <input type="text" class="form-control" id="estate_id" name="estate_id" hidden />
@@ -268,37 +275,40 @@
     </div>
 </div>
 
-
-<!-- Delete Estate Modal -->
-<!-- <div class="modal fade" id="deleteEstateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+<!--Delete Estae Modal -->
+<div class="modal fade" id="deleteEstateModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
     aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Delete Estate</h1>
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Edit User</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form method="POST">
+            <div id="modal-body-delete" class="modal-body">
+                <form id="deleteEstateForm" method="POST">
+
+                    <div class="form-group">
+                        <input type="text" class="form-control" id="estate_id" name="estate_id" hidden />
+                    </div>
 
                     Are You Sure?
                     <br>
                     <br>
 
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" id="deleteEstateConfirmBtn" class="btn btn-outline-danger"
-                        data-bs-target="#exampleModalToggle" data-bs-toggle="modal">Delete</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+
                 </form>
+
+
             </div>
             <!-- <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary">Submit</button>
-            </div> -->
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div> -->
+        </div>
+    </div>
 </div>
-</div>
-</div>
-
-
 
 
 <script>
@@ -354,7 +364,6 @@
         window.location.href = `/estates/${estate_id}`
     });
 
-
     $('#editEstateForm').submit(function (e) {
         /////////////////////// UTIL ////////////////////////////
         // var user_id = $(this).data('user_id');
@@ -372,17 +381,25 @@
         });
     });
 
-
     $(document).on("click", "#deleteEstateBtn", function () {
         var estate_id = $(this).data('estate_id');
+        $("#modal-body-delete #estate_id").val(estate_id);
+    });
+
+    $('#deleteEstateForm').submit(function (e) {
+
         $.ajax({
             type: 'POST',
-            url: `/estates/delete/${estate_id}`,
+            url: `/estates/delete`,
             data: $(this).serialize(),
         }).done(function (response) {
             location.reload();
         });
     });
+
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
 
 </script>
 

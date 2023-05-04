@@ -160,11 +160,13 @@ def edit_estate():
             return 'Fail'
 
 
-@views.route('/estates/delete/<int:id>', methods=['POST'])
+@views.route('/estates/delete', methods=['POST'])
 @login_required
-def delete_estate(id):
+def delete_estate():
+
     if request.method == "POST":
         try:
+            id = request.form.get('estate_id')
             estate = db.get_or_404(Estate, id)
             db.session.delete(estate)
             db.session.commit()
@@ -181,7 +183,6 @@ def delete_estate(id):
 @views.route('/users', methods=['GET', 'POST'])
 @login_required
 def users():
-    # print(Customer.query.filter_by(name='Yaso').first().estates)
 
     return render_template('users.html', user=current_user, customers=Customer.query.all())
 
@@ -244,19 +245,18 @@ def user_edit():
             return 'Fail'
 
 
-@views.route('/users/delete/<int:id>', methods=['POST'])
+@views.route('/users/delete', methods=['POST'])
 @login_required
-def user_delete(id):
+def user_delete():
     if request.method == "POST":
         try:
+            id = request.form.get('user_id')
+            print(id)
             customer = db.get_or_404(Customer, id)
             db.session.delete(customer)
             db.session.commit()
             flash('User Succesfully Deleted!', category='success')
-
             return 'OK'
-
         except:
             flash('Error while Deleting User!', category='error')
-
             return 'Fail'

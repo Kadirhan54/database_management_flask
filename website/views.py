@@ -73,7 +73,7 @@ def estates():
         taksit_sayisi = request.form.get('taksit-sayisi')
         taksit_tutari = request.form.get('taksit-tutari')
         yatirmci_verilecek = request.form.get('yatirimci-verilecek')
-        saglam_gruba_kalan = request.form.get('saglam-gruba-kalan')
+        net_kar = request.form.get('net-kar')
 
         try:
             customer_id = Customer.query.filter_by(name=name).first().id
@@ -83,7 +83,7 @@ def estates():
                                 m2=m2, m2_birim=m2_birim, alim_tarih=alim_tarih, satis_tarih=satis_tarih,
                                 alinan_pesinat=alinan_pesinat, satis_fiyat=satis_fiyat, taksit_sayisi=taksit_sayisi,
                                 taksit_tutari=taksit_tutari, yatirimci_verilecek=yatirmci_verilecek,
-                                saglam_gruba_kalan=saglam_gruba_kalan)
+                                net_kar=net_kar)
 
             db.session.add(new_estate)
             db.session.commit()
@@ -128,7 +128,7 @@ def edit_estate():
             taksit_sayisi = request.form.get('taksit-sayisi')
             taksit_tutari = request.form.get('taksit-tutari')
             yatirmci_verilecek = request.form.get('yatirimci-verilecek')
-            saglam_gruba_kalan = request.form.get('saglam-gruba-kalan')
+            net_kar = request.form.get('net-kar')
 
             estate = Estate.query.filter_by(id=estate_id).first()
 
@@ -147,7 +147,7 @@ def edit_estate():
             estate.taksit_sayisi = taksit_sayisi
             estate.taksit_tutari = taksit_tutari
             estate.yatirmci_verilecek = yatirmci_verilecek
-            estate.saglam_gruba_kalan = saglam_gruba_kalan
+            estate.net_kar = net_kar
 
             db.session.commit()
             flash('User Succesfully Edited!', category='success')

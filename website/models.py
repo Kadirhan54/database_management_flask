@@ -28,7 +28,7 @@ class Estate(db.Model):
     taksit_sayisi = db.Column(db.Integer)
     taksit_tutari = db.Column(db.Integer)
     yatirimci_verilecek = db.Column(db.Integer)
-    saglam_gruba_kalan = db.Column(db.Integer)
+    net_kar = db.Column(db.Integer)
 
 
 class User(db.Model, UserMixin):

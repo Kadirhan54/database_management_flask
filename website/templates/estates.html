@@ -26,7 +26,7 @@
                 <th scope="col" style="text-align:center">Taksit Sayısı</th>
                 <th scope="col" style="text-align:center">Taksit Tutarı</th>
                 <th scope="col" style="text-align:center">Yatırımcıya Verilecek</th>
-                <th scope="col" style="text-align:center">Sağlam Gruba Kalan</th>
+                <th scope="col" style="text-align:center">Net Kar</th>
                 <th scope="col" style="text-align:left">
                     <button id="addEstateBtn" href="" class="btn btn-primary btn-sm" data-bs-toggle="modal"
                         data-bs-target="#addEstateModal">Add Estate</button>
@@ -61,7 +61,7 @@
                 <td style="text-align:center">{{ estate.taksit_tutari }}</td>
                 <!-- <td style="text-align:center">{{ estate.taksit_tutari | int * estate.taksit_sayisi | int }}</td> -->
                 <td style="text-align:center">{{ estate.yatirimci_verilecek }}</td>
-                <td style="text-align:center">{{ estate.saglam_gruba_kalan }}</td>
+                <td style="text-align:center">{{ estate.net_kar }}</td>
 
                 <td>
                     <button id="editEstateBtn" href="#editEstateModal" class="btn btn-outline-secondary btn-sm"
@@ -72,7 +72,7 @@
                         data-satis_tarih="{{ estate.satis_tarih }}" data-satis_fiyat="{{ estate.satis_fiyat }}"
                         data-taksit_sayisi="{{ estate.taksit_sayisi }}" data-taksit_tutari="{{ estate.taksit_tutari }}"
                         data-yatirimci_verilecek="{{ estate.yatirimci_verilecek }}"
-                        data-saglam_gruba_kalan="{{ estate.saglam_gruba_kalan }}" data-bs-toggle="modal"> Edit
+                        data-net_kar="{{ estate.net_kar }}" data-bs-toggle="modal"> Edit
                     </button>
                     <button type="button" id="detailsEstateBtn" class="btn btn-outline-info btn-sm"
                         data-estate_id="{{ estate.id }}">Details </button>
@@ -164,20 +164,16 @@
                         <input type="text" class="form-control" id="yatirimci-verilecek" name="yatirimci-verilecek" />
                     </div>
                     <div class="form-group">
-                        <label for="saglam-gruba-kalan">Sağlam Gruba Kalan</label>
-                        <input type="text" class="form-control" id="saglam-gruba-kalan" name="saglam-gruba-kalan" />
+                        <label for="net-kar">Net Kar</label>
+                        <input type="text" class="form-control" id="net-kar" name="net-kar" />
                     </div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-outline-primary">Submit</button>
                 </form>
                 {% else %}
 
-                User yok aga
-                <div class="form-group">
-                    <label for="project">Proje</label>
-                    <input type="text" class="form-control" id="project" name="project" />
-                </div>
-
+                There is no users! Please create a user.
+                
                 {% endif %}
 
             </div>
@@ -259,8 +255,8 @@
                         <input type="text" class="form-control" id="yatirimci-verilecek" name="yatirimci-verilecek" />
                     </div>
                     <div class="form-group">
-                        <label for="saglam-gruba-kalan">Sağlam Gruba Kalan</label>
-                        <input type="text" class="form-control" id="saglam-gruba-kalan" name="saglam-gruba-kalan" />
+                        <label for="net-kar">Net Kar</label>
+                        <input type="text" class="form-control" id="net-kar" name="net-kar" />
                     </div>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-primary">Submit</button>
@@ -339,7 +335,7 @@
         var taksit_sayisi = $(this).data('taksit_sayisi');
         var taksit_tutari = $(this).data('taksit_tutari');
         var yatirimci_verilecek = $(this).data('yatirimci_verilecek');
-        var saglam_gruba_kalan = $(this).data('saglam_gruba_kalan');
+        var net_kar = $(this).data('net_kar');
 
         $("#modal-body-edit #estate_id").val(estate_id);
         $("#modal-body-edit #project").val(project);
@@ -355,7 +351,7 @@
         $("#modal-body-edit #taksit-sayisi").val(taksit_sayisi);
         $("#modal-body-edit #taksit-tutari").val(taksit_tutari);
         $("#modal-body-edit #yatirimci-verilecek").val(yatirimci_verilecek);
-        $("#modal-body-edit #saglam-gruba-kalan").val(saglam_gruba_kalan);
+        $("#modal-body-edit #net-kar").val(net_kar);
 
     });
 

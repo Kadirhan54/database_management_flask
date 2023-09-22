@@ -61,9 +61,22 @@ This is a web application built using the Flask framework for managing real esta
 If you would like to contribute to this project, please follow these steps:
 
 1. Fork the repository.
-2. Create a new branch for your feature or bugfix: git checkout -b feature-name.
-3. Make your changes and commit them: git commit -m 'Add some feature'.
-4. Push to the branch: git push origin feature-name.
+
+2. Create a new branch for your feature or bugfix: 
+
+    ```bash
+    git checkout -b feature-name.
+
+3. Make your changes and commit them:
+
+    ```bash
+    git commit -m "Add some feature"
+
+4. Push to the branch: 
+
+    ```bash
+    git push origin feature-name.
+
 5. Create a pull request on GitHub.
 
 # License

@@ -10,6 +10,8 @@ This is a web application built using the Flask framework for managing real esta
 - CRUD operations for vehicle listings.
 - Search functionality to filter listings based on various criteria.
 - Interactive user interface for easy navigation.
+- Admin panel for system management
+- Data export and reporting capabilities
 
 ## Technologies Used
 
@@ -37,7 +39,7 @@ This is a web application built using the Flask framework for managing real esta
     ```bash
     pip install -r requirements.txt
 
-4.Run the application:
+4. Run the application:
 
     ```bash
     flask run
@@ -45,26 +47,31 @@ This is a web application built using the Flask framework for managing real esta
 5. Access the application in your web browser at http://localhost:5000.
 
 
+
 ## Usage
 
 - Create an account or log in if you already have one.
 - Browse the available real estate and vehicle listings.
 - Add new listings, edit existing ones, or delete listings if you have the appropriate permissions.
+- Access the admin panel for system management tasks.
+- Export data and generate reports as needed.
 
 # Contributing
 
 If you would like to contribute to this project, please follow these steps:
 
-- Fork the repository.
-- Create a new branch for your feature or bugfix: git checkout -b feature-name.
-- Make your changes and commit them: git commit -m 'Add some feature'.
-- Push to the branch: git push origin feature-name.
-- Create a pull request on GitHub.
+1. Fork the repository.
+2. Create a new branch for your feature or bugfix: git checkout -b feature-name.
+3. Make your changes and commit them: git commit -m 'Add some feature'.
+4. Push to the branch: git push origin feature-name.
+5. Create a pull request on GitHub.
 
 # License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 # Acknowledgments
+
 Thanks to the Flask and SQLAlchemy developers for their fantastic libraries.
 Special thanks to the open-source community for their valuable contributions and support.
 Feel free to reach out with any questions or feedback!

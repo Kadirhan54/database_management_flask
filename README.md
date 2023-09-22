@@ -1,4 +1,3 @@
-# database_management_flask
 
 # Real Estate and Vehicle Sales Management System
 
@@ -40,27 +39,27 @@ This is a web application built using the Flask framework for managing real esta
 
 4.Run the application:
 
-    <!-- ```bash
-    flask run -->
+    ```bash
+    flask run
 
 5. Access the application in your web browser at http://localhost:5000.
 
 
-# Usage
+## Usage
 
-Create an account or log in if you already have one.
-Browse the available real estate and vehicle listings.
-Add new listings, edit existing ones, or delete listings if you have the appropriate permissions.
+- Create an account or log in if you already have one.
+- Browse the available real estate and vehicle listings.
+- Add new listings, edit existing ones, or delete listings if you have the appropriate permissions.
 
 # Contributing
 
 If you would like to contribute to this project, please follow these steps:
 
-Fork the repository.
-Create a new branch for your feature or bugfix: git checkout -b feature-name.
-Make your changes and commit them: git commit -m 'Add some feature'.
-Push to the branch: git push origin feature-name.
-Create a pull request on GitHub.
+- Fork the repository.
+- Create a new branch for your feature or bugfix: git checkout -b feature-name.
+- Make your changes and commit them: git commit -m 'Add some feature'.
+- Push to the branch: git push origin feature-name.
+- Create a pull request on GitHub.
 
 # License
 This project is licensed under the MIT License - see the LICENSE file for details.

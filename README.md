@@ -1,7 +1,7 @@
 
 # Real Estate and Vehicle Sales Management System
 
-This is a web application built using the Flask framework for managing real estate and vehicle sales. It provides a user-friendly interface for users to browse, list, and search for properties and vehicles available for sale.
+This web application was built using the Flask framework and Bootstrap for managing real estate and vehicle sales. It provides a user-friendly interface for users to browse, list, and search for properties and vehicles available for sale.
 
 ## Features
 
